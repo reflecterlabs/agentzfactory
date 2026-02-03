@@ -2,7 +2,8 @@ import { Telegraf, Context } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { config } from './config';
 import * as db from './services/database';
-import { User } from './types';
+import { User, Language } from './types';
+import { t } from './i18n';
 import * as userCommands from './commands/user';
 import * as adminCommands from './commands/admin';
 import { getMaintenanceMode } from './commands/admin';
@@ -15,7 +16,8 @@ const userSessions = new Map<string, { awaitingDescription: boolean }>();
 // Middleware para verificar mantenimiento
 bot.use(async (ctx, next) => {
   if (getMaintenanceMode() && ctx.from?.id.toString() !== config.ownerTelegramId) {
-    return ctx.reply('🔧 El bot está en mantenimiento. Vuelve en unos minutos.');
+    // Usar inglés por defecto para mantenimiento
+    return ctx.reply(t('maintenance', 'en'));
   }
   return next();
 });
@@ -39,6 +41,37 @@ bot.use(async (ctx, next) => {
 // Comando /start
 bot.command('start', async (ctx) => {
   const user = (ctx as any).user as User;
+  
+  // Si es primera vez o no tiene idioma seleccionado, preguntar idioma
+  const isNewUser = !user.language || user.language === 'en';
+  if (isNewUser && !user.lastGenerationAt) {
+    await ctx.reply(t('chooseLanguage', 'en'), {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '🇺🇸 English', callback_data: 'lang:en' }],
+          [{ text: '🇪🇸 Español', callback_data: 'lang:es' }],
+          [{ text: '🇫🇷 Français', callback_data: 'lang:fr' }],
+          [{ text: '🇩🇪 Deutsch', callback_data: 'lang:de' }],
+          [{ text: '🇵🇹 Português', callback_data: 'lang:pt' }]
+        ]
+      }
+    });
+    return;
+  }
+  
+  await userCommands.handleStart(ctx, user);
+});
+
+// Comandos de idioma
+bot.command(['lang_en', 'lang_es', 'lang_fr', 'lang_de', 'lang_pt', 'lang_zh', 'lang_ja'], async (ctx) => {
+  const user = (ctx as any).user as User;
+  const command = ctx.message.text.split(' ')[0];
+  const lang = command.replace('/lang_', '') as Language;
+  
+  await db.updateUserLanguage(user.id, lang);
+  user.language = lang;
+  
+  await ctx.reply(t('languageSet', lang, lang.toUpperCase()));
   await userCommands.handleStart(ctx, user);
 });
 
@@ -46,8 +79,6 @@ bot.command('start', async (ctx) => {
 bot.command('new', async (ctx) => {
   const user = (ctx as any).user as User;
   await userCommands.handleNew(ctx, user);
-  
-  // Marcar que estamos esperando descripción
   userSessions.set(user.id, { awaitingDescription: true });
 });
 
@@ -71,27 +102,29 @@ bot.command('status', async (ctx) => {
 
 // Comando /help
 bot.command('help', async (ctx) => {
-  await userCommands.handleHelp(ctx);
+  const user = (ctx as any).user as User;
+  await userCommands.handleHelp(ctx, user);
 });
 
 // Comando /cancel
 bot.command('cancel', async (ctx) => {
   const user = (ctx as any).user as User;
+  const lang = user.language || 'en';
   userSessions.delete(user.id);
-  await ctx.reply('❌ Operación cancelada. ¿Qué quieres hacer?\n/new - Crear app | /help - Ayuda');
+  await ctx.reply(t('cancelled', lang));
 });
 
 // Manejar mensajes de texto (para descripción de app)
 bot.on(message('text'), async (ctx) => {
   const user = (ctx as any).user as User;
+  const lang = user.language || 'en';
   const session = userSessions.get(user.id);
   
   if (session?.awaitingDescription) {
     userSessions.delete(user.id);
     await userCommands.processCreation(ctx, user, ctx.message.text);
   } else {
-    // Mensaje no esperado
-    await ctx.reply('No entiendo ese mensaje. Usa /help para ver los comandos disponibles.');
+    await ctx.reply(`I don't understand that message. Use /help to see available commands.\n\nNo entiendo ese mensaje. Usa /help para ver los comandos disponibles.`);
   }
 });
 
@@ -102,18 +135,29 @@ bot.on('callback_query', async (ctx) => {
   
   if (!data) return;
   
+  // Selección de idioma
+  if (data.startsWith('lang:')) {
+    const lang = data.split(':')[1] as Language;
+    await db.updateUserLanguage(user.id, lang);
+    user.language = lang;
+    await ctx.answerCbQuery(t('languageSet', lang, lang.toUpperCase()));
+    await ctx.deleteMessage();
+    await userCommands.handleStart(ctx, user);
+    return;
+  }
+  
   // Botón de PRO
   if (data.startsWith('pro:')) {
     const creationId = data.split(':')[1];
     await ctx.answerCbQuery();
     await userCommands.handlePro(ctx, user, creationId);
+    return;
   }
   
   // Botón de copiar dirección
   if (data.startsWith('copy:')) {
-    const address = data.split(':')[1];
-    await ctx.answerCbQuery('Dirección copiada al portapapeles');
-    // En móvil no se puede copiar automáticamente, así que solo confirmamos
+    await ctx.answerCbQuery('Address copied');
+    return;
   }
   
   // Botón de nueva app
@@ -121,12 +165,14 @@ bot.on('callback_query', async (ctx) => {
     await ctx.answerCbQuery();
     await userCommands.handleNew(ctx, user);
     userSessions.set(user.id, { awaitingDescription: true });
+    return;
   }
   
   // Botón de apps
   if (data === 'apps') {
     await ctx.answerCbQuery();
     await userCommands.handleApps(ctx, user);
+    return;
   }
   
   // Admin: eliminar usuario
@@ -134,14 +180,15 @@ bot.on('callback_query', async (ctx) => {
     const targetId = data.split(':')[1];
     await ctx.answerCbQuery();
     await adminCommands.handleAdminDelete(ctx, user, targetId);
+    return;
   }
   
   // Admin: upgrade usuario
   if (data.startsWith('admin_upgrade:')) {
     const targetId = data.split(':')[1];
     await ctx.answerCbQuery();
-    // TODO: Implementar upgrade manual
-    await ctx.reply(`⬆️ Upgrade solicitado para ${targetId}. Función en desarrollo.`);
+    await ctx.reply(`⬆️ Upgrade requested for ${targetId}. Feature in development.`);
+    return;
   }
 });
 
@@ -184,19 +231,19 @@ bot.command('admin', async (ctx) => {
 // Inicializar base de datos
 async function init() {
   await db.initDatabase();
-  console.log('✅ Base de datos inicializada');
+  console.log('✅ Database initialized');
 }
 
 // Manejar errores
 bot.catch((err, ctx) => {
   console.error('Bot error:', err);
-  ctx.reply('❌ Ha ocurrido un error. Por favor, intenta de nuevo más tarde.').catch(console.error);
+  ctx.reply('❌ An error occurred. Please try again later.').catch(console.error);
 });
 
 // Iniciar
 init().then(() => {
   bot.launch();
-  console.log('🤖 Bot iniciado');
+  console.log('🤖 Bot started');
 });
 
 // Graceful shutdown

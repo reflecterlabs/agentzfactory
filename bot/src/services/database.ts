@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
-import { User, Creation, Wallet, Payment } from '../types';
+import { User, Creation, Wallet, Payment, Language } from '../types';
 
 let db: Database | null = null;
 
@@ -30,7 +30,8 @@ async function createTables() {
       tier TEXT DEFAULT 'free',
       is_admin INTEGER DEFAULT 0,
       daily_generations INTEGER DEFAULT 0,
-      last_generation_at DATETIME
+      last_generation_at DATETIME,
+      language TEXT DEFAULT 'en'
     )
   `);
   
@@ -108,7 +109,8 @@ export async function getOrCreateUser(telegramId: string, username?: string, fir
   return {
     ...user,
     isAdmin: Boolean(user.is_admin),
-    tier: user.tier as 'free' | 'pro'
+    tier: user.tier as 'free' | 'pro',
+    language: user.language as Language || 'en'
   };
 }
 
@@ -119,13 +121,19 @@ export async function getUserByTelegramId(telegramId: string): Promise<User | nu
   return {
     ...user,
     isAdmin: Boolean(user.is_admin),
-    tier: user.tier as 'free' | 'pro'
+    tier: user.tier as 'free' | 'pro',
+    language: user.language as Language || 'en'
   };
 }
 
 export async function updateUserTier(userId: string, tier: 'free' | 'pro'): Promise<void> {
   const db = await initDatabase();
   await db.run('UPDATE users SET tier = ? WHERE id = ?', [tier, userId]);
+}
+
+export async function updateUserLanguage(userId: string, language: string): Promise<void> {
+  const db = await initDatabase();
+  await db.run('UPDATE users SET language = ? WHERE id = ?', [language, userId]);
 }
 
 export async function resetDailyGenerations(): Promise<void> {

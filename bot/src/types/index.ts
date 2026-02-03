@@ -1,5 +1,7 @@
 // types/index.ts
 
+export type Language = 'en' | 'es' | 'fr' | 'de' | 'pt' | 'zh' | 'ja';
+
 export interface User {
   id: string;
   telegramId: string;
@@ -10,6 +12,7 @@ export interface User {
   isAdmin: boolean;
   dailyGenerations: number;
   lastGenerationAt?: Date;
+  language: Language;
 }
 
 export interface Creation {
