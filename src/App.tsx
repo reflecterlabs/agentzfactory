@@ -9,6 +9,7 @@ import {
   Twitter,
   Mail
 } from 'lucide-react'
+import { BrandBadge } from './components/BrandBadge'
 import './index.css'
 
 function App() {
@@ -246,6 +247,9 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Brand Badge - appears on all generated sites */}
+      <BrandBadge position="bottom-right" />
     </div>
   )
 }
