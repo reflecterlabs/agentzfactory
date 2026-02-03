@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && npm run fix-css",
+    "fix-css": "sed -i 's/crossorigin href=\\\"\\.\\/assets\\/index-/href=\\\"\\.\\/assets\\/index-/g' dist/index.html",
     "preview": "vite preview",
     "deploy": "wrangler pages deploy dist"
   },
