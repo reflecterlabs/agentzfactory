@@ -131,6 +131,9 @@ bot.on(message('text'), async (ctx) => {
 // Callback queries (botones inline)
 bot.on('callback_query', async (ctx) => {
   const user = (ctx as any).user as User;
+  
+  // Check if it's a regular callback query with data
+  if (!('data' in ctx.callbackQuery)) return;
   const data = ctx.callbackQuery.data;
   
   if (!data) return;

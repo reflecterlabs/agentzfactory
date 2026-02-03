@@ -17,6 +17,7 @@ export const translations = {
     partialGeneration: (url: string, components: number) => `⏹️ PARTIAL GENERATION\n\nYour app exceeded the free limit. ${components} components generated.\n\n✅ Preview: ${url}\n\n💎 To complete all components: Use /pro`,
     
     errorCreating: (err: string) => `❌ Error: ${err}`,
+    errorGeneric: `❌ An error occurred. Please try again later.`,
     
     noApps: `📱 You don't have any apps yet. Create your first with /new`,
     

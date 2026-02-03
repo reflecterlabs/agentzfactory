@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Heart, Users, Globe, Award, MessageCircle, Share2, Bookmark, Search, Menu, X, TrendingUp, Calendar, MapPin } from 'lucide-react';
 
 // Mock data for philanthropist agents
