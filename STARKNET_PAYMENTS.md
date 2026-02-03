@@ -73,12 +73,12 @@ interface UserPayment {
 ```
 [Bot] 💎 ACTIVAR PRO
 
-Deposita EXACTAMENTE 0.05 STRK a:
+Deposita EXACTAMENTE 100 STRK a:
 
 📍 0x742d35Cc6634C0532925a3b8D4e6D3b6e8d3e8B9
 
 ⚠️ IMPORTANTE:
-• Monto exacto: 0.05 STRK
+• Monto exacto: 100 STRK
 • En el campo "Memo" incluye: AGENTZ-abc123
 • Red: Starknet Mainnet
 
@@ -141,13 +141,13 @@ Usuario: /pro
   ↓
 Bot: Muestra dirección + paymentId único
   ↓
-Usuario: Deposita 0.05 STRK a dirección del bot
+Usuario: Deposita 100 STRK a dirección del bot
          (con memo AGENTZ-{creationId})
   ↓
 Cron (cada 2 min): Revisa blockchain
   ↓
 Pago detectado: 
-  • Monto correcto: 0.05 STRK
+  • Monto correcto: 100 STRK
   • Memo válido: AGENTZ-abc123
   • Confirmaciones: >3
   ↓
@@ -224,7 +224,7 @@ done
 [Bot] ⚠️ PAGO INCOMPLETO
 
 Detectado: 0.03 STRK
-Requerido: 0.05 STRK
+Requerido: 100 STRK
 Faltante: 0.02 STRK
 
 Deposita el monto faltante a la misma dirección.
@@ -236,7 +236,7 @@ Deposita el monto faltante a la misma dirección.
 ```
 [Bot] ⚠️ PAGO SIN IDENTIFICAR
 
-Detectamos un depósito de 0.05 STRK
+Detectamos un depósito de 100 STRK
 pero sin memo de identificación.
 
 Para vincularlo a tu app, responde con:

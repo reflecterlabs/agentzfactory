@@ -96,7 +96,7 @@ bot/
 
 1. Usuario ejecuta `/pro`
 2. Bot genera wallet única para ese usuario
-3. Usuario deposita 0.05 STRK a la dirección
+3. Usuario deposita 100 STRK a la dirección
 4. Cron job detecta el pago cada 2 minutos
 5. Al confirmar, se activa PRO automáticamente
 

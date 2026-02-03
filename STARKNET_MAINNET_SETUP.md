@@ -58,15 +58,15 @@ export STARKNET_PRIVATE_KEY="0x...tu_private_key..."
 ```
 TU CUENTA (Argent X)
     │
-    ├── Recibe pagos de usuarios (0.05 STRK cada uno)
+    ├── Recibe pagos de usuarios (100 STRK cada uno)
     ├── Usada para verificar balances (view calls - gratis)
     └── Opcional: Distribuir fondos a wallet fría
 
 USUARIO 1
-    └── Deposita 0.05 STRK + memo "AGENTZ-abc123"
+    └── Deposita 100 STRK + memo "AGENTZ-abc123"
 
 USUARIO 2
-    └── Deposita 0.05 STRK + memo "AGENTZ-def456"
+    └── Deposita 100 STRK + memo "AGENTZ-def456"
 ```
 
 ---
@@ -240,15 +240,15 @@ Cada usuario deposita un monto ligeramente diferente:
 ```typescript
 // Mapeo de montos a creaciones
 const PAYMENT_AMOUNTS = {
-  '0.050001': 'creation-abc123',
-  '0.050002': 'creation-def456',
-  '0.050003': 'creation-ghi789',
+  '100.000001': 'creation-abc123',
+  '100.000002': 'creation-def456',
+  '100.000003': 'creation-ghi789',
   // ... generar secuencialmente
 };
 
 // Para el usuario:
-"Deposita EXACTAMENTE 0.050001 STRK"
-"Deposita EXACTAMENTE 0.050002 STRK"
+"Deposita EXACTAMENTE 100.000001 STRK"
+"Deposita EXACTAMENTE 100.000002 STRK"
 ```
 
 ### Opción B: Multi-Call con Memo
@@ -330,7 +330,7 @@ test();
 | View call (balanceOf) | $0 (gratis) |
 | Query events | $0 (gratis) |
 | Transfer (si el bot envía) | ~$0.001 STRK |
-| Deploy cuenta (si es necesario) | ~$0.01-0.05 STRK |
+| Deploy cuenta (si es necesario) | ~$0.01-100 STRK |
 
 **Presupuesto mensual estimado:** $1-5 USD en STRK
 

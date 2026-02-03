@@ -341,7 +341,7 @@ bot.command('pro', async (ctx) => {
 
     return ctx.reply(
       `💎 ACTIVAR PRO: ${creation.name}\n\n` +
-      `Deposita EXACTAMENTE 0.05 STRK a:\n` +
+      `Deposita EXACTAMENTE 100 STRK a:\n` +
       `\`${payment.address}\`\n\n` +
       `⏱️ Válido por 24 horas\n` +
       `✅ Una vez detectado el pago, tu app se activará automáticamente.`,
@@ -382,7 +382,7 @@ bot.action(/activate:(.+)/, async (ctx) => {
 
   await ctx.editMessageText(
     `💎 ACTIVAR PRO\n\n` +
-    `Deposita EXACTAMENTE 0.05 STRK a:\n` +
+    `Deposita EXACTAMENTE 100 STRK a:\n` +
     `\`${payment.address}\`\n\n` +
     `⏱️ Válido por 24 horas`,
     {
@@ -498,21 +498,21 @@ Usuario: /pro
 Bot: Genera wallet localmente (address: 0xabc...)
 Bot: Guarda en DB (address + encrypted private key)
 Bot: Muestra al usuario:
-     "Deposita 0.05 STRK a: 0xabc..."
+     "Deposita 100 STRK a: 0xabc..."
      "Válido 24 horas"
     ↓
 Cron (cada 2 min):
     Para cada dirección pendiente:
         - Query balanceOf(STRK, address)
-        - Si balance >= 0.05 STRK:
+        - Si balance >= 100 STRK:
             * Marcar como 'confirmed'
             * Activar PRO
             * Notificar usuario
     ↓
-Usuario: Deposita 0.05 STRK a 0xabc...
+Usuario: Deposita 100 STRK a 0xabc...
     ↓
 Cron detecta (próxima ejecución):
-    Balance detectado: 0.05 STRK
+    Balance detectado: 100 STRK
     → Activando PRO...
     → Notificación enviada
     ↓

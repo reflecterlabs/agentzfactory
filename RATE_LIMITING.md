@@ -198,7 +198,7 @@ async function generateWithLimits(
                  `✅ Deployado hasta: ${lastCompleteComponent.name}\n` +
                  `🔗 Ver: ${partialDeploy.url}\n\n` +
                  `💎 CONTINUAR CON PRO:\n` +
-                 `Deposita 0.05 ETH para completar:\n` +
+                 `Deposita 100 STRK para completar:\n` +
                  `• ${estimatedComplexity - lastCompleteComponent.index} componentes restantes\n` +
                  `• Funcionalidad completa\n` +
                  `• Backend incluido`,
@@ -255,7 +255,7 @@ Límite gratuito: 8 componentes, 4000 tokens
 
 OPCIONES:
 🔄 Simplificar: "Red social con feed y perfiles"
-💎 Activar PRO: 0.05 ETH para versión completa
+💎 Activar PRO: 100 STRK para versión completa
 
 [Tonel PRO] [Simplificar]
 ```
@@ -278,7 +278,7 @@ Incluye:
 ✗ Chat (pendiente)
 
 💎 CONTINUAR CON PRO:
-Deposita 0.05 ETH en:
+Deposita 100 STRK en:
 0x742d35...8B9
 
 [Ver Preview] [Activar PRO]

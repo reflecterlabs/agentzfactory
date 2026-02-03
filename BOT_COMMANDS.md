@@ -44,7 +44,7 @@ Ejemplos:
 2. 🟡 Tienda de Ropa (PARCIAL)
    🌐 /creations/def-456
    ⚠️ Límite alcanzado en 70%
-   💎 PRO: [Completar - 0.05 ETH]
+   💎 PRO: [Completar - 100 STRK]
 
 3. 🟢 Dashboard Crypto
    🌐 /creations/ghi-789
@@ -76,7 +76,7 @@ Selecciona app a activar:
 
 O depósito directo:
 📍 Wallet: 0x742d...8B9
-💰 Monto: 0.05 ETH
+💰 Monto: 100 STRK
 ⏱️ Válido: 24 horas
 ```
 

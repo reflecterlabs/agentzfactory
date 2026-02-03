@@ -86,7 +86,7 @@ interface UserWallet {
   privateKey: encrypted;     // Almacenado seguro
   creationId: string;        // Link a la creación
   status: 'pending' | 'paid' | 'activated';
-  amountRequired: number;    // Ej: 0.05 ETH
+  amountRequired: number;    // Ej: 100 STRK
   currency: 'ETH' | 'USDT' | 'USDC';
 }
 ```
@@ -99,7 +99,7 @@ Usuario escribe: "Quiero mi app PRO"
 Bot genera wallet única para ese usuario/creación
         ↓
 Bot responde:
-  "Deposita 0.05 ETH en:
+  "Deposita 100 STRK en:
    0x742d35Cc6634C0532925a3b8D4e6D3b6e8d3e8B9
    
    Tiempo límite: 24 horas"
@@ -187,7 +187,7 @@ interface Creation {
         - Likes son visuales (no persisten)
         - Sin autenticación real
         
-        💎 ACTIVAR PRO (0.05 ETH):
+        💎 ACTIVAR PRO (100 STRK):
         • Base de datos real para posts
         • Autenticación de usuarios
         • Upload de imágenes
@@ -197,7 +197,7 @@ interface Creation {
 
 [Usuario] clickea "Activar PRO"
 
-[Bot] 💳 Deposita 0.05 ETH en:
+[Bot] 💳 Deposita 100 STRK en:
       
       0xABC123... (wallet única)
       

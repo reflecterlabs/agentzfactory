@@ -16,7 +16,7 @@ export const config: BotConfig = {
     cooldownMinutes: 5
   },
   
-  proTierPrice: '0.05',
+  proTierPrice: '100',
   proToken: 'STRK',
   
   starknet: {
